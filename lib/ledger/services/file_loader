@@ -1,0 +1,10 @@
+defmodule Ledger.Services.FileLoader do
+  alias CSV
+
+  def cargar_csv(file_path) do
+    file_path
+    |> File.stream!()
+    |> CSV.decode!(headers: true)
+    |> Enum.to_list()
+  end
+end

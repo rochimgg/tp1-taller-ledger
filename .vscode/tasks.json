@@ -1,0 +1,12 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "mix escript build watch",
+      "type": "shell",
+      "command": "mix escript.build",
+      "problemMatcher": [],
+      "isBackground": true,
+    }
+  ]
+}
