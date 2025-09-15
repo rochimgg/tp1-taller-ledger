@@ -1,5 +1,4 @@
 defmodule Ledger.CLI do
-
   alias Ledger.Constants, as: Constants
 
   def parse_args(argv \\ System.argv()) do

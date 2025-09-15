@@ -3,8 +3,8 @@ defmodule Ledger.Schemas.Currency do
   import Ecto.Changeset
 
   schema "currency" do
-    field :currency_name, :string
-    field :usd_exchange_rate, :float
+    field(:currency_name, :string)
+    field(:usd_exchange_rate, :float)
   end
 
   def changeset(currency, attrs) do
@@ -13,5 +13,4 @@ defmodule Ledger.Schemas.Currency do
     |> validate_required([:currency_name, :usd_exchange_rate])
     |> validate_number(:usd_exchange_rate, greater_than: 0)
   end
-
 end

@@ -1,5 +1,4 @@
 defmodule Ledger do
-
   alias Ledger.CLI.Balance, as: Balance
   alias Ledger.CLI.Transactions, as: Transactions
 
@@ -20,5 +19,4 @@ defmodule Ledger do
   defp select_subcommand(_other) do
     IO.puts("Comando no reconocido o incompleto")
   end
-
 end

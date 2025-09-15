@@ -20,5 +20,4 @@ defmodule Ledger.Types.Type do
   def from_string(str) when is_binary(str) do
     Map.fetch!(@string_map, str)
   end
-  
 end

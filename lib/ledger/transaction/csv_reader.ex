@@ -2,7 +2,16 @@ defmodule Ledger.Transactions.CSVReader do
   alias Ledger.Types.Type
 
   def parse_line(line) do
-      [transaction_id, timestamp, origin_currency, destination_currency, amount, origin_account, destination_account, type] =
+    [
+      transaction_id,
+      timestamp,
+      origin_currency,
+      destination_currency,
+      amount,
+      origin_account,
+      destination_account,
+      type
+    ] =
       String.split(line, ";")
 
     %{
@@ -23,5 +32,4 @@ defmodule Ledger.Transactions.CSVReader do
       :error -> String.to_integer(amount) |> Kernel./(1)
     end
   end
-
 end

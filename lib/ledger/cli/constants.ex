@@ -1,5 +1,4 @@
 defmodule Ledger.Constants do
-
   def transaction_options do
     ledger_options()
   end
