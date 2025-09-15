@@ -1,16 +1,24 @@
 defmodule Ledger do
+
+  alias Ledger.CLI.Balance, as: Balance
+  alias Ledger.CLI.Transactions, as: Transactions
+
   def main(argv \\ System.argv()) do
-    IO.inspect(argv, label: "Args originales")
     argv
-    |> Ledger.CLI.normalize_custom_flags()
-    |> IO.inspect(label: "Args normalizados")
-    |> (fn args -> Optimus.parse!(Ledger.CLI.optimus(), args) end).()
-    |> handle_parsed_args()
+    |> Ledger.CLI.parse_args()
+    |> select_subcommand()
   end
 
-  defp handle_parsed_args(parsed) do
-    IO.inspect(parsed, label: "Parsed args")
-    # despachar subcommands u opciones
+  defp select_subcommand({[:balance], args}) do
+    Balance.run(args.options)
+  end
+
+  defp select_subcommand({[:transacciones], args}) do
+    Transactions.run(args.options)
+  end
+
+  defp select_subcommand(_other) do
+    IO.puts("Comando no reconocido o incompleto")
   end
 
 end

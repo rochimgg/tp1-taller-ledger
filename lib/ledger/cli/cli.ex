@@ -2,16 +2,17 @@ defmodule Ledger.CLI do
 
   alias Ledger.Constants, as: Constants
 
-
-  def normalize_custom_flags(argv) do
-    Enum.map(argv, &normalize_flag/1)
+  def parse_args(argv \\ System.argv()) do
+    argv
+    |> normalize_flags()
+    |> (fn args -> Optimus.parse!(optimus(), args) end).()
   end
 
-  defp normalize_flag(arg) do
-    case arg do
+  defp normalize_flags(argv) do
+    Enum.map(argv, fn
       "-" <> suffix -> "--" <> suffix
       other -> other
-    end
+    end)
   end
 
   def optimus do

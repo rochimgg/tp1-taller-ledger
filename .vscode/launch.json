@@ -10,9 +10,9 @@
         "-e",
         "Ledger.main(System.argv())",
         "--",
-        "balance",
+        "transacciones",
         "-c2=12345",
-        "-t=transacciones.csv"
+       //"-t=transacciones.csv"
       ],
       "projectDir": "${workspaceFolder}"
     },
