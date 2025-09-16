@@ -1,11 +1,11 @@
 defmodule Ledger.Currency.CSVReader do
   def parse_line(line) do
     [currency_name, exchange_rate] =
-      String.split(line, "=")
+      String.split(line, ";")
 
     %{
       currency_name: String.capitalize(currency_name),
-      exchange_rate: parse_amount(exchange_rate) |> Float.round(6)
+      exchange_rate: parse_amount(exchange_rate)
     }
   end
 

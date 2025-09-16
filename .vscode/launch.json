@@ -11,7 +11,7 @@
         "Ledger.main(System.argv())",
         "--",
         "transacciones",
-        "-c2=12345",
+        "-c1=userB",
        //"-t=transacciones.csv"
       ],
       "projectDir": "${workspaceFolder}"

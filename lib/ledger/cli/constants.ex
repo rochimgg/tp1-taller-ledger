@@ -22,7 +22,6 @@ defmodule Ledger.Constants do
     end)
   end
 
-  # Definición base de opciones compartidas
   defp base_options do
     %{
       origin_account: [

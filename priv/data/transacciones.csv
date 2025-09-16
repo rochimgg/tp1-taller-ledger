@@ -1,3 +1,8 @@
 1;1754937004;USDT;USDT;100.50;userA;userB;transferencia
 2;1755541804;BTC;USDT;0.1;userB;;swap
-3;1756751404;BTC;;-50000;userC;;alta_cuenta
+3;1756751404;BTC;;50000;userC;;alta_cuenta
+4;1757356204;EUR;USD;200;userA;userC;transferencia
+5;1757961004;USD;ARS;150;userB;userA;swap
+6;1758565804;ARS;USD;30000;userC;userB;transferencia
+7;1759170604;USD;;1000;userA;;alta_cuenta
+8;1759775404;EUR;BTC;0.05;userC;;transferencia

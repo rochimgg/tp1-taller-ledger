@@ -3,34 +3,45 @@ defmodule Ledger.Transactions.Service do
   alias Ledger.Transactions.CSVReader
 
   def load_from_csv_file(path) do
-    File.stream!(path)
+    path
+    |> File.stream!()
     |> Stream.with_index(1)
-    |> Enum.reduce_while([], fn {line, line_number}, acc ->
-      line = String.trim(line)
-      # ignorar líneas vacías
-      if line == "", do: {:cont, acc}
-      attrs = CSVReader.parse_line(line)
-      changeset = Transaction.changeset(%Transaction{}, attrs)
-
-      if changeset.valid? do
-        {:cont, [changeset | acc]}
-      else
-        {:halt, {:error, line_number}}
-      end
-    end)
+    |> Enum.reduce_while([], &process_line/2)
+    |> finalize_result()
   end
 
-  def list_transactions(transactions) do
-    case transactions do
+  def list_transactions(result) do
+    case result do
       {:error, line_number} ->
         IO.inspect({:error, line_number})
 
-      changesets when is_list(changesets) ->
+      {:ok, transactions} ->
         IO.puts("Transacciones válidas:")
-
-        Enum.each(Enum.reverse(changesets), fn cs ->
-          IO.inspect(cs.changes)
-        end)
+        Enum.each(transactions, &IO.inspect/1)
+        {:ok, transactions}
     end
   end
+
+  defp process_line({line, line_number}, acc) do
+    line = String.trim(line)
+
+    if line == "" do
+      {:cont, acc}
+    else
+      attrs = CSVReader.parse_line(line)
+      changeset = Transaction.changeset(%Transaction{}, attrs)
+      handle_changeset(changeset, acc, line_number)
+    end
+  end
+
+  defp handle_changeset(changeset, acc, line_number) do
+    if changeset.valid? do
+      {:cont, [changeset.changes | acc]}
+    else
+      {:halt, {:error, line_number}}
+    end
+  end
+
+  defp finalize_result({:error, line_number}), do: {:error, line_number}
+  defp finalize_result(transactions), do: {:ok, Enum.reverse(transactions)}
 end
