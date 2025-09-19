@@ -9,11 +9,11 @@ defmodule Ledger.CLI.Transactions do
     |> IO.inspect(label: "Transacciones filtradas")
   end
 
-  def filter_transactions({:ok, transactions}, opts) do
+  defp filter_transactions({:ok, transactions}, opts) do
     do_filter(transactions, opts)
   end
 
-  def filter_transactions({:error, reason}, _opts), do: {:error, reason}
+  defp filter_transactions({:error, reason}, _opts), do: {:error, reason}
 
   defp do_filter(transactions, opts) do
     Enum.filter(transactions, fn transaction ->

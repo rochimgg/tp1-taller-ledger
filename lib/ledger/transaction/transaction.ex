@@ -1,4 +1,5 @@
 alias Ledger.Types.Type, as: Type
+alias Ledger.Currency.Service, as: CurrencyService
 
 defmodule Ledger.Schemas.Transaction do
   use Ecto.Schema
@@ -16,6 +17,8 @@ defmodule Ledger.Schemas.Transaction do
   end
 
   def changeset(transaction, attrs) do
+    currency_lookup = CurrencyService.currency_lookup()
+
     transaction
     |> cast(attrs, [
       :timestamp,
@@ -29,5 +32,15 @@ defmodule Ledger.Schemas.Transaction do
     |> validate_required([:timestamp, :origin_currency, :amount, :origin_account, :type])
     |> validate_number(:amount, greater_than: 0)
     |> validate_inclusion(:type, Type.all())
+    |> validate_currency_inclusion(:origin_currency, currency_lookup)
+    |> validate_currency_inclusion(:destination_currency, currency_lookup)
+  end
+
+  defp validate_currency_inclusion(changeset, field, currency_lookup) do
+    validate_change(changeset, field, fn _, value ->
+      if value == nil or MapSet.member?(currency_lookup, value),
+        do: [],
+        else: [{field, "is not a valid currency"}]
+    end)
   end
 end

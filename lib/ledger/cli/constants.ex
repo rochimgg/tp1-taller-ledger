@@ -8,7 +8,7 @@ defmodule Ledger.Constants do
       origin_account: [
         long: "--c1",
         value_name: "CUENTA_ORIGEN",
-        help: "Especifica la cuenta origen (obligatorio para balance)",
+        help: "Especifica la cuenta origen (si no se completa, toma todas las cuentas. Es obligatorio para balance)",
         required: true
       ]
     })

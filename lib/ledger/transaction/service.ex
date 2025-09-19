@@ -16,8 +16,6 @@ defmodule Ledger.Transactions.Service do
         IO.inspect({:error, line_number})
 
       {:ok, transactions} ->
-        IO.puts("Transacciones válidas:")
-        Enum.each(transactions, &IO.inspect/1)
         {:ok, transactions}
     end
   end
@@ -43,5 +41,5 @@ defmodule Ledger.Transactions.Service do
   end
 
   defp finalize_result({:error, line_number}), do: {:error, line_number}
-  defp finalize_result(transactions), do: {:ok, Enum.reverse(transactions)}
+  defp finalize_result(transactions), do: {:ok, transactions}
 end

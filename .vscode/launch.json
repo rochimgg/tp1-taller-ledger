@@ -16,6 +16,21 @@
       ],
       "projectDir": "${workspaceFolder}"
     },
+        {
+      "type": "mix_task",
+      "request": "launch",
+      "name": "Run Balance CLI",
+      "task": "run",
+      "taskArgs": [
+        "-e",
+        "Ledger.main(System.argv())",
+        "--",
+        "balance",
+        "-c1=userB",
+       //"-t=transacciones.csv"
+      ],
+      "projectDir": "${workspaceFolder}"
+    },
     {
       "type": "mix_task",
       "name": "mix (Default task)",

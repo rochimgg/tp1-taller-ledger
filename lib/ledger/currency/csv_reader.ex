@@ -4,8 +4,8 @@ defmodule Ledger.Currency.CSVReader do
       String.split(line, ";")
 
     %{
-      currency_name: String.capitalize(currency_name),
-      exchange_rate: parse_amount(exchange_rate)
+      currency_name: currency_name,
+      usd_exchange_rate: parse_amount(exchange_rate)
     }
   end
 

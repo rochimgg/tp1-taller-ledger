@@ -6,36 +6,48 @@ defmodule Ledger.Currency.Service do
     path
     |> File.stream!()
     |> Stream.with_index(1)
-    |> Enum.reduce_while({[], false}, &process_line/2)
+    |> Enum.reduce_while([], &process_line/2)
     |> finalize_result()
   end
 
-  defp process_line({line, line_number}, {acc, has_usd?}) do
-    line = String.trim(line)
+  def currency_lookup do
+    {:ok, currencies} = Ledger.Currency.Service.load_from_csv_file("priv/data/moneda.csv")
 
-    if line == "" do
-      {:cont, {acc, has_usd?}}
-    else
-      attrs = CSVReader.parse_line(line)
-      changeset = Currency.changeset(%Currency{}, attrs)
-      handle_changeset(changeset, acc, has_usd?, line_number)
+    currencies
+    |> Enum.map(fn cs -> cs.changes.currency_name end)
+    |> MapSet.new()
+  end
+
+  def list_currencies(result) do
+    case result do
+      {:error, line_number} ->
+        IO.inspect({:error, line_number})
+
+      {:ok, currencies} ->
+        {:ok, currencies}
     end
   end
 
-  defp handle_changeset(changeset, acc, has_usd?, line_number) do
+  defp process_line({line, line_number}, acc) do
+    line = String.trim(line)
+
+    if line == "" do
+      {:cont, acc}
+    else
+      attrs = CSVReader.parse_line(line)
+      changeset = Currency.changeset(%Currency{}, attrs)
+      handle_changeset(changeset, acc, line_number)
+    end
+  end
+
+  defp handle_changeset(changeset, acc, line_number) do
     if changeset.valid? do
-      new_has_usd? = match?(%{currency: "USD"}, changeset.changes) or has_usd?
-      {:cont, {[changeset | acc], new_has_usd?}}
+      {:cont, [changeset | acc]}
     else
       {:halt, {:error, line_number}}
     end
   end
 
   defp finalize_result({:error, line_number}), do: {:error, line_number}
-
-  defp finalize_result({changesets, true}),
-    do: {:ok, changesets}
-
-  defp finalize_result({_, false}),
-    do: {:error, :missing_usd_rate}
+  defp finalize_result(changesets), do: {:ok, Enum.reverse(changesets)}
 end
