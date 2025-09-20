@@ -18,7 +18,7 @@ Ledger es un servicio CLI para gestionar transacciones y balances de cuentas. Pe
 
 `mix test`
 
-## Compilar con escript
+## Compilar con Escript
 
 ### Para generar un ejecutable de línea de comandos
 
@@ -26,9 +26,13 @@ Ledger es un servicio CLI para gestionar transacciones y balances de cuentas. Pe
 
 `mix escript.build`
 
-Esto generará un binario ledger en la raíz del proyecto.
+Esto generará un binario ledger en `./_build/dev/bin/ledger.`
 
-2. Ejecuta tu CLI:
+2. Moverse hasta el ejecutable
+
+`cd _build/dev/bin/ledger.`
+
+3. Ejecuta el CLI:
 
 `./ledger balance --c1 userA --m USD --t "path/to/transactions.csv"`
 
@@ -75,45 +79,48 @@ Todos los tests se ejecutan con:
 └── ledger.ex
 ```
 
-## Ledger - Esquemas y errores soportados
+## Esquemas y errores soportados
 
-### 1. Currency
+## Esquemas y errores que podrías encontrar
 
-Campos: `currency_name`, `usd_exchange_rate`  
+### 1. Currency (Monedas)
 
-Errores posibles:
+Cada moneda tiene estos campos: `currency_name` y `usd_exchange_rate`.  
+
+Posibles errores:
 
 - `currency_name`  
-  - `"can't be blank"`: no se pasó `currency_name`.
+  - `"can't be blank"`: no se indicó el nombre de la moneda.
 - `usd_exchange_rate`  
-  - `"can't be blank"`: no se pasó `usd_exchange_rate`.  
-  - `"must be greater than 0"`: valor <= 0.  
-  - `"is invalid"`: valor no convertible a float.
+  - `"can't be blank"`: no se indicó la tasa de cambio.  
+  - `"must be greater than 0"`: la tasa debe ser mayor que cero.  
+  - `"is invalid"`: el valor ingresado no es un número válido.
 
-### 2. Transaction
+### 2. Transaction (Transacciones)
 
-Campos: `timestamp`, `origin_currency`, `destination_currency`, `amount`, `origin_account`, `destination_account`, `type`  
+Cada transacción tiene estos campos:  
+`timestamp`, `origin_currency`, `destination_currency`, `amount`, `origin_account`, `destination_account` y `type`.  
 
-Errores posibles:
+Posibles errores:
 
 - `timestamp`  
-  - `"can't be blank"`: falta timestamp.
+  - `"can't be blank"`: falta la fecha/hora de la transacción.
 - `origin_currency`  
-  - `"can't be blank"`: falta origin_currency.  
-  - `"is not a valid currency"`: no está en el lookup de monedas.
+  - `"can't be blank"`: no se indicó la moneda de origen.  
+  - `"is not a valid currency"`: la moneda no existe en el sistema.
 - `destination_currency`  
-  - `"is not a valid currency"`: no está en el lookup (si no es `nil`).
+  - `"is not a valid currency"`: la moneda de destino no existe (si se especifica).
 - `amount`  
-  - `"can't be blank"`: falta amount.  
-  - `"must be greater than 0"`: valor <= 0.
+  - `"can't be blank"`: falta indicar el monto.  
+  - `"must be greater than 0"`: el monto debe ser mayor que cero.
 - `type`  
-  - `"can't be blank"`: falta type.  
-  - `"is invalid"`: valor no está en `Type.all()`.
+  - `"can't be blank"`: falta indicar el tipo de transacción.  
+  - `"is invalid"`: el tipo no está permitido.
 - `origin_account`  
-  - `"can't be blank"`: falta origin_account.
+  - `"can't be blank"`: no se indicó la cuenta de origen.
 - `destination_account`  
-  - `"can't be blank"`: si `type == :transferencia`.  
-  - `"cannot be the same as origin_account"`: si `type == :transferencia` y destino = origen.
+  - `"can't be blank"`: obligatorio si la transacción es una transferencia.  
+  - `"cannot be the same as origin_account"`: la cuenta de destino no puede ser la misma que la de origen en transferencias.
   
 ## Nota de limitación
 
