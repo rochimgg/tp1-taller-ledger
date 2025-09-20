@@ -11,11 +11,17 @@ defmodule Ledger.Currency.Service do
   end
 
   def currency_lookup do
-    {:ok, currencies} = Ledger.Currency.Service.load_from_csv_file("priv/data/moneda.csv")
+    case Ledger.Currency.Service.load_from_csv_file("priv/data/moneda.csv") do
+      {:ok, currencies} ->
+        currencies
+        |> Enum.reduce(%{}, fn cs, acc ->
+          Map.put(acc, cs.currency_name, cs.usd_exchange_rate)
+        end)
 
-    currencies
-    |> Enum.map(fn cs -> cs.changes.currency_name end)
-    |> MapSet.new()
+      {:error, line_number} ->
+        IO.puts("Error cargando monedas: línea #{line_number}")
+        System.halt(1)
+    end
   end
 
   def list_currencies(result) do
@@ -42,12 +48,12 @@ defmodule Ledger.Currency.Service do
 
   defp handle_changeset(changeset, acc, line_number) do
     if changeset.valid? do
-      {:cont, [changeset | acc]}
+      {:cont, [changeset.changes | acc]}
     else
       {:halt, {:error, line_number}}
     end
   end
 
   defp finalize_result({:error, line_number}), do: {:error, line_number}
-  defp finalize_result(changesets), do: {:ok, Enum.reverse(changesets)}
+  defp finalize_result(changesets), do: {:ok, changesets}
 end

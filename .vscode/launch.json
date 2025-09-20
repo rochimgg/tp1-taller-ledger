@@ -27,6 +27,7 @@
         "--",
         "balance",
         "-c1=userB",
+        "-m=USD"
        //"-t=transacciones.csv"
       ],
       "projectDir": "${workspaceFolder}"
