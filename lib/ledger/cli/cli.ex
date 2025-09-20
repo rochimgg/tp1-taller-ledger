@@ -9,8 +9,12 @@ defmodule Ledger.CLI do
 
   defp normalize_flags(argv) do
     Enum.map(argv, fn
-      "-" <> suffix -> "--" <> suffix
-      other -> other
+      arg ->
+        case arg do
+          "--" <> _ -> arg
+          "-" <> suffix -> "--" <> suffix
+          other -> other
+        end
     end)
   end
 

@@ -1,10 +1,10 @@
-alias Ledger.Transactions.Service, as: Service
+alias Ledger.Transactions.Service, as: TransactionService
 
 defmodule Ledger.CLI.Transactions do
-  def run(opts) do
+  def run(opts, transaction_service \\ TransactionService) do
     IO.inspect(opts, label: "Ejecutando comando transacciones")
 
-    Service.load_from_csv_file(opts[:transaction_file_path])
+    transaction_service.load_from_csv_file(opts[:transaction_file_path])
     |> filter_transactions(opts)
     |> IO.inspect(label: "Transacciones filtradas")
   end

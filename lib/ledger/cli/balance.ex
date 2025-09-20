@@ -1,27 +1,23 @@
-alias Ledger.Transactions.Service, as: TransactionService
 alias Ledger.Types.Type, as: TransactionType
 alias Ledger.Schemas.Balance
 
 defmodule Ledger.CLI.Balance do
-  def run(opts) do
+def run(opts, transaction_service \\ Ledger.Transactions.Service, currency_service \\ Ledger.Currency.Service) do
     IO.inspect(opts, label: "Ejecutando comando balance con opciones")
-
-    TransactionService.load_from_csv_file(opts[:transaction_file_path])
-    |> process_balance(opts)
-    |> tap(fn _ ->
-      IO.puts("MONEDA=BALANCE")
-    end)
+    transaction_service.load_from_csv_file(opts[:transaction_file_path])
+    |> process_balance(opts, currency_service)
+    |> tap(fn _ -> IO.puts("MONEDA=BALANCE") end)
     |> print_balances()
   end
 
-  defp process_balance({:ok, transactions}, opts) do
-    do_process(transactions, opts)
+  defp process_balance({:ok, transactions}, opts, currency_service) do
+    do_process(transactions, opts, currency_service)
   end
 
-  defp process_balance({:error, reason}, _opts), do: {:error, reason}
+  defp process_balance({:error, reason}, _opts, _currency_service), do: {:error, reason}
 
-  defp do_process(transactions, %{currency: nil} = opts) do
-    currency_rates = Ledger.Currency.Service.currency_lookup()
+  defp do_process(transactions, %{currency: nil} = opts, currency_service) do
+    currency_rates = currency_service.currency_lookup()
 
     balances =
       Enum.map(currency_rates, fn {currency, rate} ->
@@ -58,8 +54,8 @@ defmodule Ledger.CLI.Balance do
     {:ok, balances}
   end
 
-  defp do_process(transactions, %{currency: currency} = opts) do
-    currency_rates = Ledger.Currency.Service.currency_lookup()
+  defp do_process(transactions, %{currency: currency} = opts, currency_service) do
+    currency_rates = currency_service.currency_lookup()
 
     case Map.fetch(currency_rates, currency) do
       {:ok, rate} ->

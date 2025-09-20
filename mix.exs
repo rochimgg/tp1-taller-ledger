@@ -8,7 +8,7 @@ defmodule Tp1TallerGallo.MixProject do
       elixir: "~> 1.18",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      escript: [main_module: Ledger, path: "_build/dev/bin/ledger"],
+      escript: [main_module: Ledger, path: "_build/dev/bin/ledger"]
     ]
   end
 
@@ -20,11 +20,12 @@ defmodule Tp1TallerGallo.MixProject do
   end
 
   # Run "mix help deps" to learn about dependencies.
-def deps do
-  [
-    {:optimus, "~> 0.2"},
-    {:ecto_sql, "~> 3.7"},
-    {:csv, "~> 3.0"}
-  ]
-end
+  def deps do
+    [
+      {:optimus, "~> 0.2"},
+      {:ecto_sql, "~> 3.7"},
+      {:csv, "~> 3.0"},
+      {:mox, "~> 1.0", only: :test}
+    ]
+  end
 end
