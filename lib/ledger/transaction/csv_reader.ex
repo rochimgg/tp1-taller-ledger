@@ -1,5 +1,6 @@
 defmodule Ledger.Transactions.CSVReader do
   alias Ledger.Types.Type
+  def stream!(path), do: File.stream!(path)
 
   def parse_line(line) do
     [
