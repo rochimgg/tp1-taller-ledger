@@ -25,7 +25,9 @@ defmodule Tp1TallerGallo.MixProject do
       {:optimus, "~> 0.2"},
       {:ecto_sql, "~> 3.7"},
       {:csv, "~> 3.0"},
-      {:mox, "~> 1.0", only: :test}
+      {:mox, "~> 1.0", only: :test},
+      {:excoveralls, "~> 0.16", only: :test}
+
     ]
   end
 end

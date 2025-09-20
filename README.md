@@ -42,6 +42,10 @@ Todos los tests se ejecutan con:
 
 `mix test`
 
+Para ver el coverage (Actualmente no alcanzado):
+
+`mix test --cover`
+
 ## Estructura del proyecto
 
 ``` bash
@@ -110,3 +114,4 @@ Posibles errores:
 ## Nota de limitación
 
 Actualmente, como limitación del proyecto, **no se ha implementado la salida en archivo** mediante el flag `-o`. Todas las operaciones imprimen los resultados por terminal.
+El coverage de los testeos unitarios está en proceso de incremento, sin llegar al 90%
