@@ -68,8 +68,6 @@ Todos los tests se ejecutan con:
 
 ## Esquemas y errores soportados
 
-## Esquemas y errores que podrías encontrar
-
 ### 1. Currency (Monedas)
 
 Cada moneda tiene estos campos: `currency_name` y `usd_exchange_rate`.  
