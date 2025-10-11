@@ -1,0 +1,43 @@
+name: tp1_taller_ledger
+services:
+  db:
+    image: postgres:16
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ledger_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d
+    networks:
+      - network
+
+  ledger_app:
+    build: .
+    image: ledger_app:latest
+    container_name: ledger_app_container
+    depends_on:
+      - db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ledger_db
+      DB_HOST: db
+      MIX_ENV: dev
+    command: tail -f /dev/null
+    restart: always         
+    stdin_open: true
+    tty: true
+    networks:
+      - network
+
+volumes:
+  db_data:
+
+networks:
+  network:
+    driver: bridge

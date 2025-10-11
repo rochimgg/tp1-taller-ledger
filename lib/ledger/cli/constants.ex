@@ -38,7 +38,7 @@ defmodule Ledger.Constants do
       transaction_file_path: [
         long: "--t",
         value_name: "ARCHIVO_CSV",
-        default: Path.join(:code.priv_dir(:ledger), "data/transacciones.csv"),
+        default: Path.join(File.cwd!(), "priv/data/transacciones.csv"),
         help: "Archivo transacciones input (si no se completa toma por default transacciones.csv)"
       ],
       currency: [

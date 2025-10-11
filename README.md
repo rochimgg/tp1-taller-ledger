@@ -22,7 +22,7 @@ Ledger es un servicio CLI para gestionar transacciones y balances de cuentas. Pe
 
 ### Para generar un ejecutable de línea de comandos
 
-1. Construye el ejecutable: `mix escript.build`. Esto generará un binario ledger en `./_build/dev/bin/ledger.`
+1. Construye el ejecutable: `mix escript.build`. Esto generará un binario ledger en `./_build/dev/bin`
 
 2. Moverse hasta el directorio donde se encuentra el ejecutable: `cd _build/dev/bin`
 
