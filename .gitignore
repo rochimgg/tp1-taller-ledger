@@ -24,3 +24,6 @@ ledger-*.tar
 
 # Ignore mix's lockfile.
 mix.lock
+
+# Ignore IDE files
+.vscode/
