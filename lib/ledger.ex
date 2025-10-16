@@ -1,6 +1,7 @@
 defmodule Ledger do
   alias Ledger.CLI.Balance, as: Balance
   alias Ledger.CLI.Transactions, as: Transactions
+  alias Ledger.CLI.CurrencyCreation, as: CurrencyCreation
 
   def main(argv \\ System.argv()) do
     argv
@@ -14,6 +15,10 @@ defmodule Ledger do
 
   defp select_subcommand({[:transacciones], args}) do
     Transactions.run(args.options)
+  end
+
+  defp select_subcommand({[:crear_moneda], args}) do
+    CurrencyCreation.run(args.options)
   end
 
   defp select_subcommand(_other) do

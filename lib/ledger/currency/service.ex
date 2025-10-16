@@ -1,6 +1,6 @@
 defmodule Ledger.Currency.Service do
-  alias Ledger.Currencies.Currency
-  # ahora recibe csv_reader como parámetro, default al real
+  alias Ledger.Currency.Currency
+
   def load_from_csv_file(path, csv_reader \\ Ledger.Currency.CSVReader) do
     path
     |> csv_reader.stream!()

@@ -1,20 +1,5 @@
 name: tp1_taller_ledger
 services:
-  db:
-    image: postgres:16
-    container_name: postgres_db
-    restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: ledger_db
-    ports:
-      - "5432:5432"
-    volumes:
-      - db_data:/var/lib/postgresql/data
-      - ./db/init:/docker-entrypoint-initdb.d
-    networks:
-      - network
 
   ledger_app:
     build: .
@@ -28,10 +13,41 @@ services:
       POSTGRES_DB: ledger_db
       DB_HOST: db
       MIX_ENV: dev
+      DATABASE_URL: "ecto://postgres:postgres@db:5432/ledger_db"
     command: tail -f /dev/null
     restart: always         
     stdin_open: true
     tty: true
+    networks:
+      - network
+
+  ledger_migrate:
+    build: .
+    image: ledger_app_dev:latest
+    container_name: ledger_migrate
+    depends_on:
+      - db
+    environment:
+      MIX_ENV: dev
+      DATABASE_URL: "ecto://postgres:postgres@db:5432/ledger_db"
+    command: mix ecto.migrate
+    networks:
+      - network
+    restart: "no"
+
+  db:
+    image: postgres:16-alpine
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ledger_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d
     networks:
       - network
 

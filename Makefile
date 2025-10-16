@@ -35,16 +35,30 @@ psql:
 
 # Crear y migrar la DB
 migrate:
-	docker-compose exec ledger_app sh -c "mix ecto.create && mix ecto.migrate"
+	docker-compose run --rm ledger_app sh -c "mix ecto.create && mix ecto.migrate"
+
+migrate-dev:
+	docker-compose -f docker-compose.dev.yml run --rm ledger_migrate
 
 # Abrir shell dentro del contenedor de la app
 shell:
 	docker exec -it ledger_app_container /bin/sh
 
 run-dev:
-	docker run --rm -it \
-  	  -v $(PWD):/ledger-container \
-	  -w /ledger-container \
-	  -e DATABASE_URL="ecto://postgres:postgres@host.docker.internal:5432/ledger_db" \
-	  elixir:1.18.4-alpine \
-	  sh -c "mix local.hex --force && mix local.rebar --force && mix deps.get && mix escript.build && ./_build/dev/bin/ledger $(ARGS)"
+	docker-compose -f docker-compose.dev.yml run --rm --build ledger_app sh -c "mix escript.build && ./_build/dev/bin/ledger $(ARGS)"
+
+
+db-down-dev:
+	docker-compose -f docker-compose.dev.yml down -v
+
+db-up-dev: 
+	docker-compose -f docker-compose.dev.yml down -v &&\
+	docker-compose -f docker-compose.dev.yml up -d db
+	# Esperar que la DB esté lista
+	@sleep 5
+	# Ejecutar migraciones desde el contenedor de la app
+	docker-compose -f docker-compose.dev.yml run --rm ledger_migrate sh -c "mix ecto.create && mix ecto.migrate"
+
+new-migration:
+	@read -p "Nombre de la migración (ej: currency_unique_index): " name; \
+	mix ecto.gen.migration $$name

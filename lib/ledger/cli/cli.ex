@@ -21,7 +21,7 @@ defmodule Ledger.CLI do
   def optimus do
     Optimus.new!(
       name: "ledger",
-      version: "0.1.0",
+      version: "2.0.1",
       allow_unknown_args: true,
       parse_double_dash: true,
       subcommands: [
@@ -34,6 +34,11 @@ defmodule Ledger.CLI do
           name: "transacciones",
           about: "Listar transacciones",
           options: Constants.transaction_options()
+        ],
+        crear_moneda: [
+          name: "crear_moneda",
+          about: "Crear una nueva moneda",
+          options: Constants.currency_creation_options()
         ]
       ]
     )

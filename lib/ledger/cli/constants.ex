@@ -1,10 +1,10 @@
 defmodule Ledger.Constants do
   def transaction_options do
-    ledger_options()
+    ledger_options_tp1()
   end
 
   def balance_options do
-    ledger_options(%{
+    ledger_options_tp1(%{
       origin_account: [
         long: "--c1",
         value_name: "CUENTA_ORIGEN",
@@ -15,15 +15,35 @@ defmodule Ledger.Constants do
     })
   end
 
-  defp ledger_options(overrides \\ %{}) do
-    base_options()
+  def currency_creation_options do
+    %{
+      currency_name: [
+        long: "--n",
+        value_name: "NOMBRE_MONEDA",
+        help: "Nombre de la nueva moneda (obligatorio)",
+        required: true
+      ],
+      usd_exchange_rate: [
+        long: "--p",
+        value_name: "TASA_USD",
+        help: "Tasa de cambio respecto al USD (obligatorio)",
+        required: true
+      ]
+    }
+    |> Enum.map(fn {key, opts} ->
+      {key, Keyword.put_new(opts, :required, false)}
+    end)
+  end
+
+  defp ledger_options_tp1(overrides \\ %{}) do
+    base_options_tp1()
     |> Map.merge(overrides)
     |> Enum.map(fn {key, opts} ->
       {key, Keyword.put_new(opts, :required, false)}
     end)
   end
 
-  defp base_options do
+  defp base_options_tp1 do
     %{
       origin_account: [
         long: "--c1",

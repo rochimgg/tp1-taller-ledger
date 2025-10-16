@@ -7,6 +7,5 @@ defmodule Ledger.Repo.Migrations.CreateCurrencies do
       add :usd_exchange_rate, :float, null: false
       timestamps()
     end
-    create unique_index(:currencies, [:currency_name])
   end
 end
