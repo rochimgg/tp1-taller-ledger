@@ -1,6 +1,6 @@
 require Logger
 
-defmodule Ledger.CLI.CurrencyCreation do
+defmodule Ledger.CLI.CurrencyCreate do
   @spec run(any(), any()) :: {:error, any()} | {:ok, any()}
   def run(opts, currency_service \\ Ledger.Currencies.Currencies) do
     Logger.info("Ejecutando comando crear moneda con opciones: #{inspect(opts)}")

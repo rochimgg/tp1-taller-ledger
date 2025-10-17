@@ -13,6 +13,14 @@ defmodule Ledger.Users.User do
     has_many :received_transactions, Transaction, foreign_key: :destination_account_id
   end
 
+    @type t :: %__MODULE__{
+          id: integer(),
+          username: String.t(),
+          birthdate: Date.t(),
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
+
   def changeset(user, attrs) do
     user
     |> cast(attrs, [:username, :birthdate])

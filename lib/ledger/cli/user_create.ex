@@ -1,6 +1,6 @@
 require Logger
 
-defmodule Ledger.CLI.UserCreation do
+defmodule Ledger.CLI.UserCreate do
   alias Ledger.Users.Users, as: UserService
   @spec run(any(), any()) :: {:ok, any()} | {:error, any()}
   def run(opts, user_service \\ UserService) do
