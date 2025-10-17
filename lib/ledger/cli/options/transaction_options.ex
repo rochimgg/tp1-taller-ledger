@@ -106,7 +106,7 @@ defmodule Ledger.CLI.TransactionOptions do
 
   defp destination_currency_id_option do
     %{
-      origin_currency_id: [
+      destination_currency_id: [
         long: "--md",
         value_name: "ID_MONEDA_DESTINO",
         help: "Especifica la moneda de destino"

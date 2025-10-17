@@ -12,8 +12,9 @@ defmodule Ledger.Repo.Migrations.TransactionsUniqueIndex do
     create index(:transactions, [:origin_account_id])
     create index(:transactions, [:destination_account_id])
 
-    create unique_index(:transactions, [:origin_account_id, :type],
-      name: :unique_alta_cuenta_per_user_index
+    create unique_index(:transactions, [:origin_account_id],
+      name: :unique_alta_cuenta_per_user_index,
+      where: "type = 'alta_cuenta'"
     )
   end
 end

@@ -13,6 +13,7 @@ defmodule Ledger do
     ver_moneda: Ledger.CLI.CurrencyGet,
     alta_cuenta: Ledger.CLI.AccountCreate,
     realizar_transferencia: Ledger.CLI.TransferCreate,
+    realizar_swap: Ledger.CLI.SwapCreate,
   }
 
   def main(argv \\ System.argv()) do

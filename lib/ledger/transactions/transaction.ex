@@ -26,6 +26,10 @@ defmodule Ledger.Transactions.Transaction do
     |> base_changeset(attrs)
     |> validate_required([:amount, :type, :origin_account_id, :origin_currency_id])
     |> put_change(:type, :alta_cuenta)
+    |> unique_constraint(:origin_account_id,
+      name: :unique_alta_cuenta_per_user_index,
+      message: "este usuario ya tiene una cuenta en el sistema"
+    )
   end
 
   def create_transfer_changeset(transaction, attrs) do
@@ -41,7 +45,7 @@ defmodule Ledger.Transactions.Transaction do
     |> put_change(:type, :transferencia)
   end
 
-  def do_swap_changeset(transaction, attrs) do
+  def create_swap_changeset(transaction, attrs) do
     transaction
     |> base_changeset(attrs)
     |> validate_required([
