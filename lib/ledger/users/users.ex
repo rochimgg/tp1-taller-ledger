@@ -25,4 +25,12 @@ defmodule Ledger.Users.Users do
       user -> Repo.delete(user)
     end
   end
+
+  @spec get_user(integer()) :: {:ok, User.t()} | {:error, :not_found}
+  def get_user(id) when is_integer(id) do
+    case Repo.get(User, id) do
+      nil -> {:error, :not_found}
+      user -> {:ok, user}
+    end
+  end
 end

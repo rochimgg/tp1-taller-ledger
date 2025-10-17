@@ -46,8 +46,8 @@ defmodule Ledger.CLI.UserSubcommands do
 
   defp get_user do
     %{
-      obtener_usuario: [
-        name: "obtener_usuario",
+      ver_usuario: [
+        name: "ver_usuario",
         about: "Obtener un usuario existente",
         options: UserOptions.get_user_options()
       ]

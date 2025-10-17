@@ -6,6 +6,7 @@ defmodule Ledger do
     crear_usuario: Ledger.CLI.UserCreate,
     editar_usuario: Ledger.CLI.UserUpdate,
     eliminar_usuario: Ledger.CLI.UserDelete,
+    ver_usuario: Ledger.CLI.UserGet,
   }
 
   def main(argv \\ System.argv()) do
