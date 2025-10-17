@@ -47,6 +47,14 @@ shell:
 run-dev:
 	docker-compose -f docker-compose.dev.yml run --rm --build ledger_app sh -c "mix escript.build && ./_build/dev/bin/ledger $(ARGS)"
 
+dev-setup:
+	docker-compose -f docker-compose.dev.yml run --rm --build ledger_app sh -c "\
+		mix escript.build && \
+		./_build/dev/bin/ledger crear_moneda -n=ARG -p=1500 && \
+		./_build/dev/bin/ledger crear_moneda -n=USD -p=1 && \
+		./_build/dev/bin/ledger crear_usuario -n=rocio -b=1994-10-18 && \
+		./_build/dev/bin/ledger crear_usuario -n=vlad -b=1995-04-29 \
+	"
 
 db-down-dev:
 	docker-compose -f docker-compose.dev.yml down -v

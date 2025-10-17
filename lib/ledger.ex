@@ -11,6 +11,7 @@ defmodule Ledger do
     editar_moneda: Ledger.CLI.CurrencyUpdate,
     borrar_moneda: Ledger.CLI.CurrencyDelete,
     ver_moneda: Ledger.CLI.CurrencyGet,
+    alta_cuenta: Ledger.CLI.AccountCreate
   }
 
   def main(argv \\ System.argv()) do
