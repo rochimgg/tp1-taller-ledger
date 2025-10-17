@@ -13,3 +13,5 @@ config :ledger, Ledger.Repo,
 
 config :logger,
   level: :info
+
+import_config "#{config_env()}.exs"

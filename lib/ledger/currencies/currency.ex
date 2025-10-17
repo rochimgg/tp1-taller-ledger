@@ -48,5 +48,4 @@ defmodule Ledger.Currencies.Currency do
       changeset
     end
   end
-
 end

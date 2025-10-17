@@ -1,4 +1,7 @@
+require Logger
+
 defmodule Ledger.Currencies.Currencies do
+  require Logger
   alias Ledger.Currencies.Currency, as: Currency
   alias Ledger.Repo, as: Repo
 
@@ -6,21 +9,16 @@ defmodule Ledger.Currencies.Currencies do
     Repo.all(Currency)
   end
 
-  def create_currency(currency_name, usd_exchange_rate) do
-    create_currency(%{
-      currency_name: currency_name,
-      usd_exchange_rate: String.to_float(usd_exchange_rate)
-    })
-  end
+  def update_currency(currency_id, attrs) do
+    case Repo.get(Currency, currency_id) do
+      nil ->
+        {:error, :not_found}
 
-  @spec update_currency(
-          any(),
-          :invalid | %{optional(:__struct__) => none(), optional(atom() | binary()) => any()}
-        ) :: any()
-  def update_currency(id, attrs) do
-    currency = Repo.get(Currency, id)
-    changeset = Currency.changeset(currency, attrs)
-    Repo.update(changeset)
+      currency ->
+        currency
+        |> Currency.changeset(attrs)
+        |> Repo.update()
+    end
   end
 
   def get_currency(id) when is_integer(id) do
@@ -30,9 +28,66 @@ defmodule Ledger.Currencies.Currencies do
     end
   end
 
-  defp create_currency(attrs) do
-    %Currency{}
-    |> Currency.changeset(attrs)
-    |> Repo.insert()
+  def delete_currency(id) do
+    case Repo.get(Currency, id) do
+      nil -> {:error, :not_found}
+      currency -> Repo.delete(currency)
+    end
+  end
+
+  def create_currency(attrs) do
+    Logger.debug("Atributos recibidos en create_currency: #{inspect(attrs)}")
+
+    case Map.fetch(attrs, :usd_exchange_rate) do
+      {:ok, value} ->
+        case parse_float(value) do
+          {:ok, float_val} ->
+            %Currency{}
+            |> Currency.changeset(Map.put(attrs, :usd_exchange_rate, float_val))
+            |> Repo.insert()
+
+          {:error, msg} ->
+            Logger.error("No se pudo parsear usd_exchange_rate: #{msg}")
+            {:error, "No se pudo convertir '#{value}' a float"}
+        end
+
+      :error ->
+        %Currency{}
+        |> Currency.changeset(attrs)
+        |> Repo.insert()
+    end
+  end
+
+  defp parse_float({:ok, value}) when is_float(value), do: {:ok, value}
+
+
+  defp parse_float(value) when is_binary(value) do
+    clean_value = String.trim(value)
+    Logger.debug("Parseando valor a float: #{inspect(clean_value)}")
+
+    case Float.parse(clean_value) do
+      {num, ""} ->
+        {:ok, num}
+
+      {_num, rest} ->
+        {:error, "No es un número válido (sobrante: #{inspect(rest)})"}
+
+      :error ->
+        {:error, "No es un número válido: #{inspect(value)}"}
+    end
+  end
+
+  defp parse_float(value) when is_integer(value) do
+    Logger.debug("Parseando entero a float: #{inspect(value)}")
+    {:ok, value * 1.0}
+  end
+
+  defp parse_float(value) when is_float(value) do
+    Logger.debug("Valor ya es float: #{inspect(value)}")
+    {:ok, value}
+  end
+
+  defp parse_float(_value) do
+    {:error, "Tipo no válido para conversión a float"}
   end
 end

@@ -1,14 +1,15 @@
+require Logger
 defmodule Ledger do
   @commands %{
     balance: Ledger.CLI.Balance,
     transacciones: Ledger.CLI.Transactions,
     crear_usuario: Ledger.CLI.UserCreate,
     editar_usuario: Ledger.CLI.UserUpdate,
-    eliminar_usuario: Ledger.CLI.UserDelete,
+    borrar_usuario: Ledger.CLI.UserDelete,
     ver_usuario: Ledger.CLI.UserGet,
     crear_moneda: Ledger.CLI.CurrencyCreate,
     editar_moneda: Ledger.CLI.CurrencyUpdate,
-    eliminar_moneda: Ledger.CLI.CurrencyDelete,
+    borrar_moneda: Ledger.CLI.CurrencyDelete,
     ver_moneda: Ledger.CLI.CurrencyGet,
   }
 
@@ -19,8 +20,10 @@ defmodule Ledger do
   end
 
   defp select_subcommand({[cmd], args}) do
+    Logger.debug("Comandos habilitados: #{inspect(Map.keys(@commands))}")
     case Map.fetch(@commands, cmd) do
       {:ok, module} ->
+        Logger.debug("Comando seleccionado: #{inspect(cmd)}")
         module.run(args.options)
 
       :error ->

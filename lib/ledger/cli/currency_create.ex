@@ -1,8 +1,9 @@
 require Logger
 
 defmodule Ledger.CLI.CurrencyCreate do
+  alias Ledger.Currencies.Currencies, as: CurrencyService
   @spec run(any(), any()) :: {:error, any()} | {:ok, any()}
-  def run(opts, currency_service \\ Ledger.Currencies.Currencies) do
+  def run(opts, currency_service \\ CurrencyService) do
     Logger.info("Ejecutando comando crear moneda con opciones: #{inspect(opts)}")
     create_currency(opts, currency_service)
   end
@@ -17,17 +18,29 @@ defmodule Ledger.CLI.CurrencyCreate do
     {:error, :missing_usd_exchange_rate}
   end
 
-  defp create_currency(opts, currency_service) do
-    case currency_service.create_currency(opts.currency_name, opts.usd_exchange_rate) do
-      {:ok, currency} ->
-        Logger.info("Moneda creada exitosamente: #{inspect(currency)}")
-        {:ok, currency}
+defp create_currency(opts, currency_service) do
+  case currency_service.create_currency(%{
+         currency_name: opts.currency_name,
+         usd_exchange_rate: opts.usd_exchange_rate
+       }) do
+    {:ok, currency} ->
+      Logger.info("Moneda creada exitosamente: #{inspect(currency)}")
+      {:ok, currency}
 
-      {:error, changeset} ->
-        Enum.each(changeset.errors, fn {field, {message, _}} ->
-          Logger.error("Error al crear la moneda - #{field}: #{message}")
-        end)
-        {:error, changeset}
-    end
+    {:error, %Ecto.Changeset{} = changeset} ->
+      Enum.each(changeset.errors, fn {field, {message, _}} ->
+        Logger.error("Error al crear la moneda - #{field}: #{message}")
+      end)
+      {:error, changeset}
+
+    {:error, msg} when is_binary(msg) ->
+      Logger.error("Error al crear la moneda: #{msg}")
+      {:error, msg}
+
+    other ->
+      Logger.error("Error desconocido: #{inspect(other)}")
+      {:error, :unknown}
   end
+end
+
 end

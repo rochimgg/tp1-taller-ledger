@@ -1,11 +1,11 @@
 require Logger
 
 defmodule Ledger.CLI.CurrencyUpdate do
-  alias Ledger.Currencies.Currencies, as: UserService
+  alias Ledger.Currencies.Currencies, as: CurrencyService
 
-  def run(opts) do
+  def run(opts, currency_service \\ CurrencyService) do
     Logger.info("Ejecutando comando editar moneda con opciones: #{inspect(opts)}")
-    case update_currency(opts, UserService) do
+    case update_currency(opts, currency_service) do
       {:ok, currency} ->
         Logger.info(
           "Moneda actualizada exitosamente: #{inspect(currency)}"

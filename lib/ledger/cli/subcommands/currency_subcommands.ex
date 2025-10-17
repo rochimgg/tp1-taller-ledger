@@ -34,8 +34,8 @@ defmodule Ledger.CLI.CurrencySubcommands do
 
   defp delete_currency do
     %{
-      eliminar_moneda: [
-        name: "eliminar_moneda",
+      borrar_moneda: [
+        name: "borrar_moneda",
         about: "Eliminar una moneda existente",
         options: CurrencyOptions.delete_currency_options()
       ]
