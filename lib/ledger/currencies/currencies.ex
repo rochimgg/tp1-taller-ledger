@@ -13,10 +13,16 @@ defmodule Ledger.Currencies.Currencies do
     })
   end
 
+  def get_currency(id) when is_integer(id) do
+    case Repo.get(Currency, id) do
+      nil -> {:error, :not_found}
+      user -> {:ok, user}
+    end
+  end
+
   defp create_currency(attrs) do
     %Currency{}
     |> Currency.changeset(attrs)
     |> Repo.insert()
   end
-
 end

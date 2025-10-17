@@ -44,8 +44,8 @@ defmodule Ledger.CLI.CurrencySubcommands do
 
   defp get_currency do
     %{
-      obtener_moneda: [
-        name: "obtener_moneda",
+      ver_moneda: [
+        name: "ver_moneda",
         about: "Obtener una moneda existente",
         options: CurrencyOptions.get_currency_options()
       ]

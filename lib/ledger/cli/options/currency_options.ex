@@ -32,8 +32,8 @@ defmodule Ledger.CLI.CurrencyOptions do
 
   defp currency_id_option do
     %{
-      currency_name: [
-        long: "--m",
+      currency_id: [
+        long: "--id",
         value_name: "ID_MONEDA",
         help: "Id de la moneda (obligatorio)",
         required: true

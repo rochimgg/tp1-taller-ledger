@@ -2,11 +2,14 @@ defmodule Ledger do
   @commands %{
     balance: Ledger.CLI.Balance,
     transacciones: Ledger.CLI.Transactions,
-    crear_moneda: Ledger.CLI.CurrencyCreate,
     crear_usuario: Ledger.CLI.UserCreate,
     editar_usuario: Ledger.CLI.UserUpdate,
     eliminar_usuario: Ledger.CLI.UserDelete,
     ver_usuario: Ledger.CLI.UserGet,
+    crear_moneda: Ledger.CLI.CurrencyCreate,
+    editar_moneda: Ledger.CLI.CurrencyUpdate,
+    eliminar_moneda: Ledger.CLI.CurrencyDelete,
+    ver_moneda: Ledger.CLI.CurrencyGet,
   }
 
   def main(argv \\ System.argv()) do
