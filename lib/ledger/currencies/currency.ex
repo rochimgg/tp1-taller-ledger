@@ -1,11 +1,16 @@
-defmodule Ledger.Currency.Currency do
+defmodule Ledger.Currencies.Currency do
   use Ecto.Schema
   import Ecto.Changeset
+
+  alias Ledger.Transactions.Transaction, as: Transaction
 
   schema "currencies" do
     field(:currency_name, :string)
     field(:usd_exchange_rate, :float)
     timestamps()
+
+    has_many :origin_currency_in_transactions, Transaction, foreign_key: :origin_currency_id
+    has_many :destination_currency_in_transactions, Transaction, foreign_key: :destination_currency_id
   end
 
   def changeset(currency, attrs) do

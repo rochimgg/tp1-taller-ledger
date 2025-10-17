@@ -1,18 +1,17 @@
-alias Ledger.Types.Type, as: Type
-alias Ledger.Currency.Service, as: CurrencyService
-
 defmodule Ledger.Schemas.Transaction do
+  alias Ledger.Types.Type, as: Type
+  alias Ledger.Currencies.Service, as: CurrencyService
   use Ecto.Schema
   import Ecto.Changeset
 
   schema "transactions" do
     field(:id_transaction, :id)
     field(:timestamp, :utc_datetime_usec)
-    field(:origin_currency, :string)
-    field(:destination_currency, :string)
+    field(:origin_currency_id, :string)
+    field(:destination_currency_id, :string)
     field(:amount, :float)
-    field(:origin_account, :string)
-    field(:destination_account, :string)
+    field(:origin_account_id, :string)
+    field(:destination_account_id, :string)
     field(:type, Ecto.Enum, values: Type.all())
   end
 

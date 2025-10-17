@@ -1,4 +1,4 @@
-defmodule Ledger.Currency.CSVReader do
+defmodule Ledger.Currencies.CSVReader do
   def stream!(path), do: File.stream!(path)
 
   def parse_line(line) do

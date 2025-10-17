@@ -1,5 +1,5 @@
-defmodule Ledger.Currency.Currencies do
-  alias Ledger.Currency.Currency, as: Currency
+defmodule Ledger.Currencies.Currencies do
+  alias Ledger.Currencies.Currency, as: Currency
   alias Ledger.Repo, as: Repo
 
   def list_currencies do

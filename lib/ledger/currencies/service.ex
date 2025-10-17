@@ -1,7 +1,7 @@
-defmodule Ledger.Currency.Service do
-  alias Ledger.Currency.Currency
+defmodule Ledger.Currencies.Service do
+  alias Ledger.Currencies.Currency
 
-  def load_from_csv_file(path, csv_reader \\ Ledger.Currency.CSVReader) do
+  def load_from_csv_file(path, csv_reader \\ Ledger.Currencies.CSVReader) do
     path
     |> csv_reader.stream!()
     |> Stream.with_index(1)
@@ -26,7 +26,7 @@ defmodule Ledger.Currency.Service do
     end
   end
 
-  def currency_lookup(service \\ __MODULE__, csv_reader \\ Ledger.Currency.CSVReader) do
+  def currency_lookup(service \\ __MODULE__, csv_reader \\ Ledger.Currencies.CSVReader) do
     case service.load_from_csv_file("priv/data/moneda.csv", csv_reader) do
       {:ok, currencies} ->
         currencies
