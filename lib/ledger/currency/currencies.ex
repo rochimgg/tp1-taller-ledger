@@ -14,8 +14,6 @@ defmodule Ledger.Currency.Currencies do
   end
 
   defp create_currency(attrs) do
-    IO.inspect(attrs, label: "attrs")
-
     %Currency{}
     |> Currency.changeset(attrs)
     |> Repo.insert()

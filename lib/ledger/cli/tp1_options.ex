@@ -1,41 +1,14 @@
-defmodule Ledger.Constants do
+defmodule Ledger.CLI.Tp1Options do
+
   def transaction_options do
     ledger_options_tp1()
   end
 
   def balance_options do
-    ledger_options_tp1(%{
-      origin_account: [
-        long: "--c1",
-        value_name: "CUENTA_ORIGEN",
-        help:
-          "Especifica la cuenta origen (si no se completa, toma todas las cuentas. Es obligatorio para balance)",
-        required: true
-      ]
-    })
+    ledger_options_tp1(origin_account_required_option())
   end
 
-  def currency_creation_options do
-    %{
-      currency_name: [
-        long: "--n",
-        value_name: "NOMBRE_MONEDA",
-        help: "Nombre de la nueva moneda (obligatorio)",
-        required: true
-      ],
-      usd_exchange_rate: [
-        long: "--p",
-        value_name: "TASA_USD",
-        help: "Tasa de cambio respecto al USD (obligatorio)",
-        required: true
-      ]
-    }
-    |> Enum.map(fn {key, opts} ->
-      {key, Keyword.put_new(opts, :required, false)}
-    end)
-  end
-
-  defp ledger_options_tp1(overrides \\ %{}) do
+  def ledger_options_tp1(overrides \\ %{}) do
     base_options_tp1()
     |> Map.merge(overrides)
     |> Enum.map(fn {key, opts} ->
@@ -70,6 +43,27 @@ defmodule Ledger.Constants do
         long: "--o",
         value_name: "ARCHIVO_SALIDA",
         help: "Archivo de salida (si no se completa se imprimen por terminal)"
+      ]
+    }
+  end
+
+  def origin_account_option do
+    %{
+      origin_account: [
+        long: "--c1",
+        value_name: "CUENTA_ORIGEN",
+        help: "Especifica la cuenta origen"
+      ]
+    }
+  end
+
+  def origin_account_required_option do
+    %{
+      origin_account: [
+        long: "--c1",
+        value_name: "CUENTA_ORIGEN",
+        help: "Especifica la cuenta origen (obligatorio)",
+        required: true
       ]
     }
   end

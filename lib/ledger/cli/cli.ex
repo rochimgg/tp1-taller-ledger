@@ -1,5 +1,17 @@
 defmodule Ledger.CLI do
-  alias Ledger.Constants, as: Constants
+  alias Ledger.CLI.{
+    Tp1Subcommands,
+    UserSubcommands,
+    CurrencySubcommands,
+    TransactionSubcommands
+  }
+
+  @subcommand_modules [
+    Tp1Subcommands,
+    UserSubcommands,
+    CurrencySubcommands,
+    TransactionSubcommands
+  ]
 
   def parse_args(argv \\ System.argv()) do
     argv
@@ -24,23 +36,14 @@ defmodule Ledger.CLI do
       version: "2.0.1",
       allow_unknown_args: true,
       parse_double_dash: true,
-      subcommands: [
-        balance: [
-          name: "balance",
-          about: "Listar el balance de una cuenta",
-          options: Constants.balance_options()
-        ],
-        transacciones: [
-          name: "transacciones",
-          about: "Listar transacciones",
-          options: Constants.transaction_options()
-        ],
-        crear_moneda: [
-          name: "crear_moneda",
-          about: "Crear una nueva moneda",
-          options: Constants.currency_creation_options()
-        ]
-      ]
+      subcommands: load_all_subcommands()
     )
   end
+
+defp load_all_subcommands do
+  @subcommand_modules
+  |> Enum.flat_map(& &1.get_all())
+end
+
+
 end

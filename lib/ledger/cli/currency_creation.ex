@@ -2,7 +2,7 @@ require Logger
 
 defmodule Ledger.CLI.CurrencyCreation do
   def run(opts, currency_service \\ Ledger.Currency.Currencies) do
-    Logger.info("Ejecutando comando moneda con opciones: #{inspect(opts)}")
+    Logger.info("Ejecutando comando crear moneda con opciones: #{inspect(opts)}")
     create_currency(opts, currency_service)
   end
 

@@ -9,7 +9,6 @@ defmodule Ledger.Currency.Currency do
   end
 
   def changeset(currency, attrs) do
-    IO.inspect(attrs, label: "attrs")
     currency
     |> cast(attrs, [:currency_name, :usd_exchange_rate])
     |> validate_required([:currency_name, :usd_exchange_rate], message: "este campo es obligatorio")

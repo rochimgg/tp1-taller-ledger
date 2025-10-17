@@ -10,3 +10,6 @@ config :ledger, Ledger.Repo,
   hostname: System.get_env("DB_HOST") || "db",
   port: 5432,
   pool_size: 10
+
+config :logger,
+  level: :info
