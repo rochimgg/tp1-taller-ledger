@@ -1,8 +1,8 @@
 defmodule Ledger.CLI.UserOptions do
   def create_user_options do
     [
-      user_name_option(),
-      user_birth_date_option()
+      username_option(),
+      birthdate_option()
     ]
     |> Enum.flat_map(& &1)
   end
@@ -10,7 +10,7 @@ defmodule Ledger.CLI.UserOptions do
   def update_user_options do
     [
       user_id_option(),
-      user_name_option()
+      username_option()
     ]
     |> Enum.flat_map(& &1)
   end
@@ -30,10 +30,10 @@ defmodule Ledger.CLI.UserOptions do
   end
 
   # Opciones individuales (cada una devuelve una Keyword list)
-  defp user_name_option do
+  defp username_option do
     [
-      user_name: [
-        long: "--id",
+      username: [
+        long: "--n",
         value_name: "NOMBRE_USUARIO",
         help: "Nombre del usuario (obligatorio)",
         required: true
@@ -44,7 +44,7 @@ defmodule Ledger.CLI.UserOptions do
   defp user_id_option do
     [
       user_id: [
-        long: "--u",
+        long: "--id",
         value_name: "ID_USUARIO",
         help: "Id del usuario (obligatorio)",
         required: true
@@ -52,9 +52,9 @@ defmodule Ledger.CLI.UserOptions do
     ]
   end
 
-  defp user_birth_date_option do
+  defp birthdate_option do
     [
-      user_birthdate: [
+      birthdate: [
         long: "--b",
         value_name: "FECHA_NACIMIENTO",
         help: "Fecha de nacimiento del usuario (obligatorio)",

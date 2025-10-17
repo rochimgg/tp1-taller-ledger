@@ -1,8 +1,12 @@
-alias Ledger.Types.Type, as: TransactionType
-alias Ledger.Schemas.Balance
+
 
 defmodule Ledger.CLI.Balance do
-def run(opts, transaction_service \\ Ledger.Transactions.Service, currency_service \\ Ledger.Currency.Service) do
+  alias Ledger.Types.Type, as: TransactionType
+  alias Ledger.Schemas.Balance, as: Balance
+  alias Ledger.Transactions.Service, as: TransactionService
+  alias Ledger.Currency.Service, as: CurrencyService
+
+def run(opts, transaction_service \\ TransactionService, currency_service \\ CurrencyService) do
     IO.inspect(opts, label: "Ejecutando comando balance con opciones")
     transaction_service.load_from_csv_file(opts[:transaction_file_path])
     |> process_balance(opts, currency_service)

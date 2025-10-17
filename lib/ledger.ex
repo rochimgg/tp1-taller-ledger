@@ -1,7 +1,10 @@
 defmodule Ledger do
-  alias Ledger.CLI.Balance, as: Balance
-  alias Ledger.CLI.Transactions, as: Transactions
-  alias Ledger.CLI.CurrencyCreation, as: CurrencyCreation
+  @commands %{
+    balance: Ledger.CLI.Balance,
+    transacciones: Ledger.CLI.Transactions,
+    crear_moneda: Ledger.CLI.CurrencyCreation,
+    crear_usuario: Ledger.CLI.UserCreation
+  }
 
   def main(argv \\ System.argv()) do
     argv
@@ -9,19 +12,15 @@ defmodule Ledger do
     |> select_subcommand()
   end
 
-  defp select_subcommand({[:balance], args}) do
-    Balance.run(args.options)
+  defp select_subcommand({[cmd], args}) do
+    case Map.fetch(@commands, cmd) do
+      {:ok, module} ->
+        module.run(args.options)
+
+      :error ->
+        IO.puts("Comando desconocido: #{cmd}")
+    end
   end
 
-  defp select_subcommand({[:transacciones], args}) do
-    Transactions.run(args.options)
-  end
-
-  defp select_subcommand({[:crear_moneda], args}) do
-    CurrencyCreation.run(args.options)
-  end
-
-  defp select_subcommand(_other) do
-    IO.puts("Comando no reconocido o incompleto")
-  end
+  defp select_subcommand(_), do: IO.puts("Comando no reconocido o incompleto")
 end

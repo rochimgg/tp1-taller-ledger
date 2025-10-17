@@ -6,7 +6,7 @@ defmodule Ledger.Users.User do
 
   schema "users" do
     field :username, :string
-    field :birth_date, :date
+    field :birthdate, :date
     timestamps()
 
     has_many :sent_transactions, Transaction, foreign_key: :origin_account_id
@@ -15,30 +15,49 @@ defmodule Ledger.Users.User do
 
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:username, :birth_date])
-    |> validate_required([:username, :birth_date])
-    |> validate_username_unique()
+    |> cast(attrs, [:username, :birthdate])
+    |> validate_required([:username, :birthdate])
+    |> unique_constraint(:username, name: :unique_username_index, message: "El nombre de usuario debe ser único")
+    |> validate_birthdate()
     |> validate_age_over_18()
   end
 
   defp validate_age_over_18(changeset) do
-    case get_field(changeset, :birth_date) do
+    case get_field(changeset, :birthdate) do
       nil -> changeset
-      birth_date ->
+      birthdate ->
         today = Date.utc_today()
-        age = Date.diff(today, birth_date) / 365.25
+        age = Date.diff(today, birthdate) / 365.25
         if age < 18 do
-          add_error(changeset, :birth_date, "El usuario debe ser mayor de 18 años")
+          add_error(changeset, :birthdate, "El usuario debe ser mayor de 18 años")
         else
           changeset
         end
     end
   end
 
-  defp validate_username_unique(changeset) do
-    changeset
-    |> unique_constraint(:username, message: "El nombre de usuario debe ser único")
+
+defp validate_birthdate(changeset) do
+  case fetch_change(changeset, :birthdate) do
+    {:ok, birthdate} ->
+      cond do
+        not is_struct(birthdate, Date) ->
+          add_error(changeset, :birthdate, "Formato inválido. Debe ser YYYY-MM-DD")
+
+        Date.compare(birthdate, Date.utc_today()) == :gt ->
+          add_error(changeset, :birthdate, "La fecha de nacimiento no puede ser futura")
+
+        Date.diff(Date.utc_today(), birthdate) < 365 * 18 ->
+          add_error(changeset, :birthdate, "El usuario debe tener al menos 18 años")
+
+        true ->
+          changeset
+      end
+
+    :error ->
+      changeset
   end
+end
 
   def edit_changeset(user, attrs) do
     user

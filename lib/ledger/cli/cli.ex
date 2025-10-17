@@ -40,10 +40,9 @@ defmodule Ledger.CLI do
     )
   end
 
-defp load_all_subcommands do
-  @subcommand_modules
-  |> Enum.flat_map(& &1.get_all())
-end
-
+  defp load_all_subcommands do
+    @subcommand_modules
+    |> Enum.flat_map(& &1.get_all())
+  end
 
 end
