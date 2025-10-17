@@ -13,10 +13,20 @@ defmodule Ledger.Currencies.Currencies do
     })
   end
 
+  @spec update_currency(
+          any(),
+          :invalid | %{optional(:__struct__) => none(), optional(atom() | binary()) => any()}
+        ) :: any()
+  def update_currency(id, attrs) do
+    currency = Repo.get(Currency, id)
+    changeset = Currency.changeset(currency, attrs)
+    Repo.update(changeset)
+  end
+
   def get_currency(id) when is_integer(id) do
     case Repo.get(Currency, id) do
       nil -> {:error, :not_found}
-      user -> {:ok, user}
+      currency -> {:ok, currency}
     end
   end
 
