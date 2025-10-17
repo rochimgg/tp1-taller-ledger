@@ -36,7 +36,7 @@ defmodule Ledger.CLI.UserCreate do
         {:error, :underage_user, "El usuario debe tener al menos 18 años."}
 
       _ ->
-        case user_service.create_user(opts.username, birthdate) do
+        case user_service.create_user(%{username: opts.username, birthdate: birthdate}) do
           {:ok, user} ->
             Logger.info("Usuario creado exitosamente: #{inspect(user)}")
             {:ok, user}
@@ -52,18 +52,19 @@ defmodule Ledger.CLI.UserCreate do
   end
 
   defp create_user(%{username: username, birthdate: birthdate}, user_service) do
-  case Date.from_iso8601(birthdate) do
-    {:ok, date} ->
-      user_service.create_user(%{username: username, birthdate: date})
-      |> handle_insert_result()
-    {:error, _} ->
-      {:error, "Fecha de nacimiento inválida. Usá formato YYYY-MM-DD."}
+    case Date.from_iso8601(birthdate) do
+      {:ok, date} ->
+        user_service.create_user(%{username: username, birthdate: date})
+        |> handle_insert_result()
+
+      {:error, _} ->
+        {:error, "Fecha de nacimiento inválida. Usá formato YYYY-MM-DD."}
+    end
   end
-end
 
-defp handle_insert_result({:ok, user}), do: {:ok, user}
-defp handle_insert_result({:error, changeset}) do
-  {:error, Ecto.Changeset.traverse_errors(changeset, fn {msg, _opts} -> msg end)}
-end
+  defp handle_insert_result({:ok, user}), do: {:ok, user}
 
+  defp handle_insert_result({:error, changeset}) do
+    {:error, Ecto.Changeset.traverse_errors(changeset, fn {msg, _opts} -> msg end)}
+  end
 end
