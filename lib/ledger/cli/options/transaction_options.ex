@@ -76,7 +76,7 @@ defmodule Ledger.CLI.TransactionOptions do
 
   defp origin_user_id_option do
     %{
-      origin_user: [
+      origin_user_id: [
         long: "--o",
         value_name: "ID_USUARIO_ORIGEN",
         help: "Especifica el id del usuario de origen"
@@ -86,7 +86,7 @@ defmodule Ledger.CLI.TransactionOptions do
 
   defp destination_user_id_option do
     %{
-      destination_user: [
+      destination_user_id: [
         long: "--d",
         value_name: "ID_USUARIO_DESTINO",
         help: "Especifica el id del usuario de destino"
@@ -96,7 +96,7 @@ defmodule Ledger.CLI.TransactionOptions do
 
   defp origin_currency_id_option do
     %{
-      origin_currency: [
+      origin_currency_id: [
         long: "--mo",
         value_name: "ID_MONEDA_ORIGEN",
         help: "Especifica la moneda de origen"
@@ -106,7 +106,7 @@ defmodule Ledger.CLI.TransactionOptions do
 
   defp destination_currency_id_option do
     %{
-      origin_currency: [
+      origin_currency_id: [
         long: "--md",
         value_name: "ID_MONEDA_DESTINO",
         help: "Especifica la moneda de destino"

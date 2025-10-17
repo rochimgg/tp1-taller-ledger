@@ -8,6 +8,12 @@ defmodule Ledger.Transactions.Transactions do
     |> Repo.insert()
   end
 
+    def create_transfer(%{origin_user_id: origin_user_id, destination_user_id: destination_user_id, currency_id: currency_id, amount: amount}) do
+    %Transaction{}
+    |> Transaction.create_transfer_changeset(%{origin_account_id: origin_user_id, destination_account_id: destination_user_id, origin_currency_id: currency_id, amount: amount, type: :transferencia})
+    |> Repo.insert()
+  end
+
   def get_user(id) when is_integer(id) do
     case Repo.get(Transaction, id) do
       nil -> {:error, :not_found}

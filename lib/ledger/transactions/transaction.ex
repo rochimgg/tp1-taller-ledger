@@ -28,7 +28,7 @@ defmodule Ledger.Transactions.Transaction do
     |> put_change(:type, :alta_cuenta)
   end
 
-  def do_transfer_changeset(transaction, attrs) do
+  def create_transfer_changeset(transaction, attrs) do
     transaction
     |> base_changeset(attrs)
     |> validate_required([
@@ -36,8 +36,7 @@ defmodule Ledger.Transactions.Transaction do
       :type,
       :origin_account_id,
       :destination_account_id,
-      :origin_currency_id,
-      :destination_currency_id
+      :origin_currency_id
     ])
     |> put_change(:type, :transferencia)
   end
