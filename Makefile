@@ -44,7 +44,8 @@ shell:
 	docker exec -it ledger_app_container /bin/sh
 
 run-dev:
-	docker-compose -f docker-compose.dev.yml run --rm --build ledger_app sh -c "mix escript.build && ./_build/dev/bin/ledger $(ARGS)"
+	docker-compose -f docker-compose.dev.yml run --rm --build ledger_app && \
+	sh -c "mix escript.build && ./_build/dev/bin/ledger $(ARGS)"
 
 dev-setup:
 	docker-compose -f docker-compose.dev.yml run --rm --build ledger_app sh -c "\

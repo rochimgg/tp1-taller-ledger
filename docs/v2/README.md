@@ -27,7 +27,7 @@ Una vez completado, el entorno estará listo con la base inicializada y la aplic
 
 ### Acceder a la terminal del contenedor
 
-Para entrar al contenedor donde corre está la aplicación compilada:
+Para entrar al contenedor donde está la aplicación compilada:
 
 ```bash
 make shell
@@ -43,7 +43,7 @@ ledger crear_usuario -n=rocio -b=1994-10-18
 ledger alta_cuenta -u=1 -m=1 -a=1500
 ```
 
-### Estructura del entorno con contenedores
+## Estructura del entorno con contenedores
 
 El entorno define tres servicios principales:
 
@@ -84,7 +84,7 @@ El entorno define tres servicios principales:
 
 El archivo `docker-compose.dev.yml` define un entorno de desarrollo liviano y reproducible que permite ejecutar la aplicación y la base de datos sin necesidad de instalar dependencias locales.
 
-Este entorno está pensado para levantar un entorno pequeño de desarrollo cada vez que se ejecuta un comando. De esta forma, se puede trabajar de manera aislada, manteniendo el desarrollo sobre contenedores.
+Este entorno está pensado para levantar un contenedor pequeño de desarrollo cada vez que se ejecuta un comando. De esta forma, se puede trabajar de manera aislada, manteniendo el desarrollo sobre contenedores.
 
 Para levantar la base de desarrollo y aplicar sus migraciones, se puede usar el siguiente comando:
 
@@ -112,6 +112,14 @@ Por ejemplo:
 
 ``` bash
 make run-dev ARGS="alta_cuenta -u=1 -m=1 -a=1500"
+```
+
+esto por detrás construye aplicacion y la sube a un contenedor de desarrollo, aplica el comando con los argumentos indicados y lo cierra al terminar el comando. La definición en el Makefile es:
+
+``` make
+run-dev:
+  docker-compose -f docker-compose.dev.yml run --rm --build ledger_app && \
+  sh -c "mix escript.build && ./_build/dev/bin/ledger $(ARGS)"
 ```
 
 ## Arquitectura del sistema
