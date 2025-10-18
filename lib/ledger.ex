@@ -14,6 +14,7 @@ defmodule Ledger do
     alta_cuenta: Ledger.CLI.AccountCreate,
     realizar_transferencia: Ledger.CLI.TransferCreate,
     realizar_swap: Ledger.CLI.SwapCreate,
+    deshacer_transaccion: Ledger.CLI.UndoTransactionCreate,
   }
 
   def main(argv \\ System.argv()) do

@@ -53,7 +53,11 @@ dev-setup:
 		./_build/dev/bin/ledger crear_moneda -n=ARG -p=1500 && \
 		./_build/dev/bin/ledger crear_moneda -n=USD -p=1 && \
 		./_build/dev/bin/ledger crear_usuario -n=rocio -b=1994-10-18 && \
-		./_build/dev/bin/ledger crear_usuario -n=vlad -b=1995-04-29 \
+		./_build/dev/bin/ledger crear_usuario -n=vlad -b=1995-04-29 && \
+		./_build/dev/bin/ledger alta_cuenta -u=1 -m=1 -a=1500 && \
+		./_build/dev/bin/ledger alta_cuenta -u=2 -m=2 -a=1000 && \
+		./_build/dev/bin/ledger realizar_transferencia -o=1 -d=2 -m=1 -a=500 && \
+		./_build/dev/bin/ledger realizar_swap -u=1 -mo=1 -md=2 -a=1000 \
 	"
 
 db-down-dev:
