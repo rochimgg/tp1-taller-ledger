@@ -1,5 +1,4 @@
 .PHONY: up down logs psql build
-ARGS ?= transacciones -c1=userB
 
 # Listar containers
 ps:
@@ -7,7 +6,7 @@ ps:
 
 # Levantar todo
 up:
-	docker-compose up -d
+	docker-compose up -d ledger_app
 
 # Apagar todo
 down:
@@ -71,6 +70,20 @@ db-up-dev:
 	# Ejecutar migraciones desde el contenedor de la app
 	docker-compose -f docker-compose.dev.yml run --rm ledger_migrate sh -c "mix ecto.create && mix ecto.migrate"
 
+db-up: 
+	docker-compose -f docker-compose.yml down -v &&\
+	docker-compose -f docker-compose.yml up -d db
+	# Esperar que la DB esté lista
+	@sleep 5
+	# Ejecutar migraciones desde el contenedor de la app
+	docker-compose -f docker-compose.yml run --rm ledger_migrate sh -c "mix ecto.create && mix ecto.migrate"
+
 new-migration:
 	@read -p "Nombre de la migración (ej: currency_unique_index): " name; \
 	mix ecto.gen.migration $$name
+
+setup:
+	make db-up && \
+	make build && \
+	make up
+
