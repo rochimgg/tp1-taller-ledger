@@ -5,11 +5,11 @@ defmodule Ledger.Currencies.Currencies do
   alias Ledger.Currencies.Currency, as: Currency
   alias Ledger.Repo, as: Repo
 
-  def list_currencies do
+  def get_all do
     Repo.all(Currency)
   end
 
-  def update_currency(currency_id, attrs) do
+  def update(currency_id, attrs) do
     case Repo.get(Currency, currency_id) do
       nil ->
         {:error, :not_found}
@@ -21,21 +21,21 @@ defmodule Ledger.Currencies.Currencies do
     end
   end
 
-  def get_currency(id) when is_integer(id) do
+  def get_by_id(id) when is_integer(id) do
     case Repo.get(Currency, id) do
       nil -> {:error, :not_found}
       currency -> {:ok, currency}
     end
   end
 
-  def delete_currency(id) do
+  def delete_by_id(id) do
     case Repo.get(Currency, id) do
       nil -> {:error, :not_found}
       currency -> Repo.delete(currency)
     end
   end
 
-  def create_currency(attrs) do
+  def insert(attrs) do
     Logger.debug("Atributos recibidos en create_currency: #{inspect(attrs)}")
 
     case Map.fetch(attrs, :usd_exchange_rate) do
@@ -59,7 +59,6 @@ defmodule Ledger.Currencies.Currencies do
   end
 
   defp parse_float({:ok, value}) when is_float(value), do: {:ok, value}
-
 
   defp parse_float(value) when is_binary(value) do
     clean_value = String.trim(value)

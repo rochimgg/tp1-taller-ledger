@@ -1,2 +1,2 @@
-# configs de prod env WIP
+# prod env configs
 import Config

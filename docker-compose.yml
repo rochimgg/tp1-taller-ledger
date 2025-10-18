@@ -3,45 +3,27 @@ services:
 
   ledger_app:
     build: .
-    image: ledger_app:latest
+    image: ledger_app:${APP_VERSION}
     container_name: ledger_app_container
     depends_on:
       - db
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: ledger_db
-      DB_HOST: db
-      MIX_ENV: prod
-      DATABASE_URL: "ecto://postgres:postgres@db:5432/ledger_db"
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      MIX_ENV: ${MIX_ENV}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
     command: tail -f /dev/null
     restart: always         
     stdin_open: true
     tty: true
     networks:
-      - network
-
-
-
-  db:
-    image: postgres:16-alpine
-    container_name: postgres_db
-    restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: ledger_db
-    ports:
-      - "5432:5432"
-    volumes:
-      - db_data:/var/lib/postgresql/data
-      - ./db/init:/docker-entrypoint-initdb.d
-    networks:
-      - network
+      - default
 
   ledger_migrate:
     build: .
-    image: ledger_app:latest
+    image: ledger_app:${APP_VERSION}
     container_name: ledger_migrate_container
     depends_on:
       - db
@@ -50,18 +32,36 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
       MIX_ENV: ${MIX_ENV}
-      DATABASE_URL: "ecto://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_HOST}:${DB_PORT}/${POSTGRES_DB}"
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
     volumes:
       - .:/app
     working_dir: /app
     command: mix ecto.migrate
     networks:
-      - network
+      - default
     restart: "no"
+
+  db:
+    image: postgres:16-alpine
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "${DB_PORT_EXTERNAL}:${DB_PORT}"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - default
 
 volumes:
   db_data:
 
 networks:
-  network:
+  default:
+    name: ${NETWORK}
     driver: bridge
+

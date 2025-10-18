@@ -1,2 +1,2 @@
-# configs de test env WIP
+# test env configs
 import Config

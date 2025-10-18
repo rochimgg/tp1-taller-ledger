@@ -2,7 +2,7 @@ name: tp1_taller_ledger_dev
 services:
   ledger_app:
     build: .
-    image: ledger_app_dev:latest
+    image: ledger_app_dev:${APP_VERSION}
     container_name: ledger_app_container_dev
     depends_on:
       - db
@@ -11,16 +11,15 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
       MIX_ENV: ${MIX_ENV}
-      DATABASE_URL: "ecto://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_HOST}:${DB_PORT}/${POSTGRES_DB}"
-    volumes:
-      - ${LEDGER_DATA_PATH}:/ledger-container/priv/data
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
     command: tail -f /dev/null
     networks:
-      - network_dev
+      - default
 
   ledger_migrate:
     build: .
-    image: ledger_app_dev:latest
+    image: ledger_app_dev:${APP_VERSION}
     container_name: ledger_migrate_container_dev
     depends_on:
       - db
@@ -29,13 +28,14 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
       MIX_ENV: ${MIX_ENV}
-      DATABASE_URL: "ecto://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_HOST}:${DB_PORT}/${POSTGRES_DB}"
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
     volumes:
       - .:/app
     working_dir: /app
     command: mix ecto.migrate
     networks:
-      - network_dev
+      - default
     restart: "no"
 
   db:
@@ -46,9 +46,11 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     ports:
-      - "5433:5432"
+      - "${DB_PORT_EXTERNAL}:${DB_PORT}"
     networks:
-      - network_dev
+      - default
 
 networks:
-  network_dev:
+  default:
+    name: ${NETWORK}
+    driver: bridge
