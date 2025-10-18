@@ -20,6 +20,9 @@ Ledger es un servicio CLI para gestionar transacciones y balances de cuentas. Pe
 
 ## Documentación por versiones
 
+Para hallar la documentación actualizada, referirse al repositorio de la desarrolladora del proyecto
+<https://github.com/rochimgg/tp1-taller-ledger>
+
 - [Versión TP1 1.x](docs/v1/README.md)
 - [Versión TP2 2.x](docs/v2/README.md)
 
