@@ -14,10 +14,6 @@ Ledger es un servicio CLI para gestionar transacciones y balances de cuentas. Pe
 
 `mix deps.get`
 
-### Correr los tests para verificar que todo funcione
-
-`mix test`
-
 ## Documentación por versiones
 
 Para hallar la documentación actualizada, referirse al repositorio de la desarrolladora del proyecto
