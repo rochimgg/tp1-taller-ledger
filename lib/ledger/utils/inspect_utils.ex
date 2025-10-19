@@ -1,9 +1,4 @@
 defmodule Ledger.Utils.InspectUtils do
-  @moduledoc """
-  Utilidades para formatear structs de dominio en logs e inspecciones.
-  """
-
-  # Función principal para formatear structs
   def format_struct(struct, fields \\ []) do
     name =
       struct.__struct__
