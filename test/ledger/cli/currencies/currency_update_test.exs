@@ -10,7 +10,7 @@ defmodule Ledger.CLI.Currencies.CurrencyUpdateTest do
     opts = %{currency_id: 1, usd_exchange_rate: 1200.5}
     updated_currency = %{id: 1, currency_name: "ARS", usd_exchange_rate: 1200.5}
 
-    expect(CurrenciesMock, :update_currency, fn 1, %{usd_exchange_rate: 1200.5} ->
+    expect(CurrenciesMock, :update, fn 1, %{usd_exchange_rate: 1200.5} ->
       {:ok, updated_currency}
     end)
 
@@ -20,7 +20,7 @@ defmodule Ledger.CLI.Currencies.CurrencyUpdateTest do
   test "retorna error si el update falla" do
     opts = %{currency_id: 1, usd_exchange_rate: 999.9}
 
-    expect(CurrenciesMock, :update_currency, fn 1, %{usd_exchange_rate: 999.9} ->
+    expect(CurrenciesMock, :update, fn 1, %{usd_exchange_rate: 999.9} ->
       {:error, :not_found}
     end)
 

@@ -22,6 +22,6 @@ defmodule Ledger.CLI.Currencies.CurrencyUpdate do
          %{currency_id: id, usd_exchange_rate: usd_exchange_rate},
          currencies_module
        ) do
-    currencies_module.update_currency(id, %{usd_exchange_rate: usd_exchange_rate})
+    currencies_module.update(id, %{usd_exchange_rate: usd_exchange_rate})
   end
 end

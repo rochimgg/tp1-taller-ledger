@@ -17,7 +17,7 @@ defmodule Ledger.CLI.Currencies.CurrencyGetTest do
     end
 
     test "llama al servicio y devuelve la moneda si se encuentra" do
-      expect(CurrenciesMock, :get_currency, fn 10 ->
+      expect(CurrenciesMock, :get, fn 10 ->
         {:ok, %{id: 10, name: "USD"}}
       end)
 
@@ -26,7 +26,7 @@ defmodule Ledger.CLI.Currencies.CurrencyGetTest do
     end
 
     test "retorna error si el servicio indica que no se encontró la moneda" do
-      expect(CurrenciesMock, :get_currency, fn 99 ->
+      expect(CurrenciesMock, :get, fn 99 ->
         {:error, :not_found}
       end)
 
