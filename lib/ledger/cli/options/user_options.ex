@@ -1,4 +1,4 @@
-defmodule Ledger.CLI.UserOptions do
+defmodule Ledger.CLI.Options.UserOptions do
   def create_user_options do
     [
       username_option(),
@@ -29,7 +29,6 @@ defmodule Ledger.CLI.UserOptions do
     |> Enum.flat_map(& &1)
   end
 
-  # Opciones individuales (cada una devuelve una Keyword list)
   defp username_option do
     [
       username: [

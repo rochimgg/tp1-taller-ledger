@@ -2,7 +2,7 @@ defmodule Ledger.Currency.ServiceTest do
   use ExUnit.Case, async: true
   import Mox
 
-  alias Ledger.Currency.Service
+  alias Ledger.Currencies.Service
 
   setup :verify_on_exit!
 

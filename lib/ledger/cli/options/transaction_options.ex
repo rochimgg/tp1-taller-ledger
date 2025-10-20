@@ -1,4 +1,4 @@
-defmodule Ledger.CLI.TransactionOptions do
+defmodule Ledger.CLI.Options.TransactionOptions do
 
   def create_account_options do
     [

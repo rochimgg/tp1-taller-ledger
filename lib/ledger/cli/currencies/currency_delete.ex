@@ -1,6 +1,6 @@
 require Logger
 
-defmodule Ledger.CLI.CurrencyDelete do
+defmodule Ledger.CLI.Currencies.CurrencyDelete do
   alias Ledger.Currencies.Currencies, as: CurrencyService
 
   def run(opts, currency_service \\ CurrencyService) do
@@ -11,7 +11,10 @@ defmodule Ledger.CLI.CurrencyDelete do
 
       {:error, :not_found} ->
         Logger.error("No se encontró una moneda con ID #{inspect(opts.currency_id)}")
-        {:error, "No se encontró una moneda con ID #{inspect(opts.currency_id)}"}
+        {:error, :not_found}
+
+      {:error, reason} ->
+        {:error, reason}
     end
   end
 
@@ -19,6 +22,11 @@ defmodule Ledger.CLI.CurrencyDelete do
          %{currency_id: id},
          currencies_module
        ) do
-    currencies_module.delete_currency(id)
+    currencies_module.delete(id)
+  end
+
+  defp delete_currency(_, _currencies_module) do
+    Logger.error("Error: El ID de la moneda es obligatorio para eliminar.")
+    {:error, :missing_currency_id}
   end
 end

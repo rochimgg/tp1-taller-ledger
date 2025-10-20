@@ -29,7 +29,8 @@ defmodule Tp1TallerGallo.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:csv, "~> 3.0"},
       {:mox, "~> 1.0", only: :test},
-      {:excoveralls, "~> 0.16", only: :test}
+      {:excoveralls, "~> 0.16", only: :test},
+      {:dotenvy, "~> 0.7"}
     ]
   end
 end

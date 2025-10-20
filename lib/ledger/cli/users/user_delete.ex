@@ -1,4 +1,4 @@
-defmodule Ledger.CLI.UserDelete do
+defmodule Ledger.CLI.Users.UserDelete do
   alias Ledger.Users.Users, as: UserService
 
   def run(%{user_id: id}) do

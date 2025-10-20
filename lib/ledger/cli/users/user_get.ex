@@ -1,6 +1,6 @@
 require Logger
 
-defmodule Ledger.CLI.UserGet do
+defmodule Ledger.CLI.Users.UserGet do
   alias Ledger.Users.Users, as: UserService
 
   @spec run(%{:user_id => nil | binary() | integer(), optional(any()) => any()}) ::

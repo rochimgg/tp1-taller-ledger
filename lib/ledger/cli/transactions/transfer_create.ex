@@ -1,6 +1,6 @@
 require Logger
 
-defmodule Ledger.CLI.TransferCreate do
+defmodule Ledger.CLI.Transactions.TransferCreate do
   alias Ledger.Transactions.Transactions, as: TransactionService
 
   def run(opts, transaction_service \\ TransactionService) do

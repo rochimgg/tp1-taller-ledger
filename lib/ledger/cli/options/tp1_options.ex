@@ -1,4 +1,4 @@
-defmodule Ledger.CLI.Tp1Options do
+defmodule Ledger.CLI.Options.Tp1Options do
 
   def transaction_options do
     ledger_options_tp1()

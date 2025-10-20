@@ -1,7 +1,7 @@
 defmodule Ledger.Currency.CSVReaderTest do
   use ExUnit.Case
 
-  alias Ledger.Currency.CSVReader
+  alias Ledger.Currencies.CSVReader
 
   describe "parse_line/1" do
     test "parses a line with a float exchange rate" do

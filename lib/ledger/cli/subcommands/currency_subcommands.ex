@@ -1,53 +1,52 @@
-defmodule Ledger.CLI.CurrencySubcommands do
+defmodule Ledger.CLI.Subcommands.CurrencySubcommands do
+  alias Ledger.CLI.Options.CurrencyOptions, as: CurrencyOptions
 
-  alias Ledger.CLI.CurrencyOptions, as: CurrencyOptions
-
-  def get_all do
+  def get_all(options_module \\ CurrencyOptions) do
     [
-      create_currency(),
-      update_currency(),
-      delete_currency(),
-      get_currency()
+      create_currency(options_module),
+      update_currency(options_module),
+      delete_currency(options_module),
+      get_currency(options_module)
     ]
     |> Enum.flat_map(&Map.to_list/1)
   end
 
-  defp create_currency do
+  defp create_currency(options_module) do
     %{
       crear_moneda: [
         name: "crear_moneda",
         about: "Crear una nueva moneda",
-        options: CurrencyOptions.create_currency_options()
+        options: options_module.create_currency_options()
       ]
     }
   end
 
-  defp update_currency do
+  defp update_currency(options_module) do
     %{
       editar_moneda: [
         name: "editar_moneda",
         about: "Editar una moneda existente",
-        options: CurrencyOptions.update_currency_options()
+        options: options_module.update_currency_options()
       ]
     }
   end
 
-  defp delete_currency do
+  defp delete_currency(options_module) do
     %{
       borrar_moneda: [
         name: "borrar_moneda",
         about: "Eliminar una moneda existente",
-        options: CurrencyOptions.delete_currency_options()
+        options: options_module.delete_currency_options()
       ]
     }
   end
 
-  defp get_currency do
+  defp get_currency(options_module) do
     %{
       ver_moneda: [
         name: "ver_moneda",
         about: "Obtener una moneda existente",
-        options: CurrencyOptions.get_currency_options()
+        options: options_module.get_currency_options()
       ]
     }
   end

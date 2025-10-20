@@ -1,4 +1,4 @@
-defmodule Ledger.CLI.CurrencyOptions do
+defmodule Ledger.CLI.Options.CurrencyOptions do
 
   def create_currency_options do
     [

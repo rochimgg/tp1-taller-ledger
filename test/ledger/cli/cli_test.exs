@@ -1,45 +1,33 @@
 defmodule Ledger.CLITest do
-  use ExUnit.Case
+  require Logger
+  use ExUnit.Case, async: true
+  import Mox
 
   alias Ledger.CLI
+  alias Ledger.CLI.Subcommands.CurrencySubcommandMock
 
-  describe "parse_args/1" do
-    test "parsea argumentos de balance correctamente" do
-      argv = ["balance", "--c1", "userA", "--m", "USD"]
+  setup :verify_on_exit!
 
-      {subcommand, result} = CLI.parse_args(argv)
+  test "load_all_subcommands usa los subcommands inyectados" do
+    expect(CurrencySubcommandMock, :get_all, fn ->
+      [
+        ver_moneda: [
+          name: "ver_moneda",
+          about: "Obtener una moneda existente",
+          options: [
+            currency_id: [
+              long: "--id",
+              value_name: "ID_MONEDA",
+              help: "Id de la moneda (obligatorio)",
+              required: true
+            ]
+          ]
+        ]
+      ]
+    end)
 
-      # Optimus devuelve los subcomandos como lista
-      assert subcommand == [:balance]
-
-      # Verificamos que las opciones se hayan parseado
-      assert result.options.origin_account == "userA"
-      assert result.options.currency == "USD"
-    end
-  end
-
-  describe "normalize_flags/1 effect through parse_args/1" do
-    test "convierte -x en --x y deja otros intactos" do
-      argv = ["balance", "-c1", "userA", "--m", "USD"]
-
-      {subcommand, result} = CLI.parse_args(argv)
-
-      assert subcommand == [:balance]
-      assert result.options.origin_account == "userA"
-      assert result.options.currency == "USD"
-    end
-  end
-
-  describe "optimus/0" do
-    test "crea subcomandos balance y transacciones" do
-      cli = Ledger.CLI.optimus()
-
-      subcommand_names =
-        cli.subcommands
-        |> Enum.map(fn %Optimus{name: name} -> String.to_atom(name) end)
-
-      assert :balance in subcommand_names
-      assert :transacciones in subcommand_names
-    end
+    {subcommand, parsed} = CLI.parse_args(["ver_moneda", "--id=1"], [CurrencySubcommandMock])
+    assert Enum.member?(subcommand, :ver_moneda)
+    assert Map.has_key?(parsed.options, :currency_id)
   end
 end

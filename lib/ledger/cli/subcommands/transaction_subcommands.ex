@@ -1,65 +1,63 @@
-defmodule Ledger.CLI.TransactionSubcommands do
+defmodule Ledger.CLI.Subcommands.TransactionSubcommands do
+  alias Ledger.CLI.Options.TransactionOptions
 
-  alias Ledger.CLI.TransactionOptions, as: TransactionOptions
-
-  def get_all do
+  def get_all(options_module \\ TransactionOptions) do
     [
-      create_account(),
-      do_transfer(),
-      do_swap(),
-      undo_transaction(),
-      get_transaction()
+      create_account(options_module),
+      do_transfer(options_module),
+      do_swap(options_module),
+      undo_transaction(options_module),
+      get_transaction(options_module)
     ]
     |> Enum.flat_map(&Map.to_list/1)
-
   end
 
-  defp create_account do
+  defp create_account(options_module) do
     %{
       alta_cuenta: [
         name: "alta_cuenta",
         about: "Dar de alta una nueva cuenta",
-        options: TransactionOptions.create_account_options()
+        options: options_module.create_account_options()
       ]
     }
   end
 
-  defp do_transfer do
+  defp do_transfer(options_module) do
     %{
       realizar_transferencia: [
         name: "realizar_transferencia",
         about: "Realizar una transferencia entre cuentas",
-        options: TransactionOptions.do_transfer_options()
+        options: options_module.do_transfer_options()
       ]
     }
   end
 
-  defp do_swap do
+  defp do_swap(options_module) do
     %{
       realizar_swap: [
         name: "realizar_swap",
         about: "Realizar un swap entre monedas de un mismo usuario",
-        options: TransactionOptions.do_swap_options()
+        options: options_module.do_swap_options()
       ]
     }
   end
 
-  defp undo_transaction do
+  defp undo_transaction(options_module) do
     %{
       deshacer_transaccion: [
         name: "deshacer_transaccion",
         about: "Deshacer una transacción realizada",
-        options: TransactionOptions.undo_transaction_options()
+        options: options_module.undo_transaction_options()
       ]
     }
   end
 
-    defp get_transaction do
+  defp get_transaction(options_module) do
     %{
       ver_transaccion: [
         name: "ver_transaccion",
         about: "Ver una transacción existente",
-        options: TransactionOptions.get_transaction_options()
+        options: options_module.get_transaction_options()
       ]
     }
   end

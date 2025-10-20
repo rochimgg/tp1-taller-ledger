@@ -1,41 +1,20 @@
-require Logger
-
 defmodule Ledger.Currencies.Currencies do
   require Logger
-  alias Ledger.Currencies.Currency, as: Currency
+  alias Ledger.Currencies.Currency
   alias Ledger.Repo, as: Repo
 
-  def get_all do
-    Repo.all(Currency)
+  def get_all(repo \\ Repo) do
+    repo.all(Currency)
   end
 
-  def update(currency_id, attrs) do
-    case Repo.get(Currency, currency_id) do
-      nil ->
-        {:error, :not_found}
-
-      currency ->
-        currency
-        |> Currency.changeset(attrs)
-        |> Repo.update()
-    end
-  end
-
-  def get_by_id(id) when is_integer(id) do
-    case Repo.get(Currency, id) do
+  def get(id, repo \\ Repo) when is_integer(id) do
+    case repo.get(Currency, id) do
       nil -> {:error, :not_found}
       currency -> {:ok, currency}
     end
   end
 
-  def delete_by_id(id) do
-    case Repo.get(Currency, id) do
-      nil -> {:error, :not_found}
-      currency -> Repo.delete(currency)
-    end
-  end
-
-  def insert(attrs) do
+  def insert(attrs, repo \\ Repo) do
     Logger.debug("Atributos recibidos en create_currency: #{inspect(attrs)}")
 
     case Map.fetch(attrs, :usd_exchange_rate) do
@@ -44,7 +23,7 @@ defmodule Ledger.Currencies.Currencies do
           {:ok, float_val} ->
             %Currency{}
             |> Currency.changeset(Map.put(attrs, :usd_exchange_rate, float_val))
-            |> Repo.insert()
+            |> repo.insert()
 
           {:error, msg} ->
             Logger.error("No se pudo parsear usd_exchange_rate: #{msg}")
@@ -54,7 +33,30 @@ defmodule Ledger.Currencies.Currencies do
       :error ->
         %Currency{}
         |> Currency.changeset(attrs)
-        |> Repo.insert()
+        |> repo.insert()
+    end
+  end
+
+  def update(currency_id, attrs, repo \\ Repo) do
+    case repo.get(Currency, currency_id) do
+      nil ->
+        {:error, :not_found}
+
+      currency ->
+        case currency
+        |> Currency.changeset(attrs)
+        |> repo.update() do
+          {:ok, _currency} -> {:ok, :updated_currency}
+          {:error, _changeset} -> {:error, :update_error}
+        end
+    end
+  end
+
+  def delete(id, repo \\ Repo) do
+    case repo.get(Currency, id) do
+      nil -> {:error, :not_found}
+      currency -> repo.delete(currency)
+        {:ok, :deleted}
     end
   end
 

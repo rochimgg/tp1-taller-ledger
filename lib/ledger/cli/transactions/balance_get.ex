@@ -1,6 +1,6 @@
 
 
-defmodule Ledger.CLI.BalanceGet do
+defmodule Ledger.CLI.Transactions.BalanceGet do
   alias Ledger.Types.Type, as: TransactionType
   alias Ledger.Schemas.Balance, as: Balance
   alias Ledger.Transactions.Service, as: TransactionService

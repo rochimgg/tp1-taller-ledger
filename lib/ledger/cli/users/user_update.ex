@@ -1,4 +1,4 @@
-defmodule Ledger.CLI.UserUpdate do
+defmodule Ledger.CLI.Users.UserUpdate do
   alias Ledger.Users.Users, as: UserService
 
   def run(opts) do
